@@ -40,7 +40,7 @@ python create_visualwakewords_annotations.py \
 ```
 
 The generated annotations follow the [COCO Data format](http://cocodataset.org/#format-data).
-```json
+```
 {
   "info" : info, 
   "images" : [image], 
