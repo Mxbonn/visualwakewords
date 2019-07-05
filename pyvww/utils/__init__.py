@@ -1,0 +1,1 @@
+from .visualwakewords import VisualWakeWords
