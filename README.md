@@ -9,18 +9,18 @@ image classification dataset.
 
  ---
  ### Installation
- The code is implemented in Python 3.7.
+ The code is implemented in Python 3.7 and can be installed with pip:
  ```bash
  pip install -e .
  ```
  
  ### Usage
- The Visual Wake Words Dataset is derived from the publicly available [COCO](https://cocodataset.org) dataset.
+ The Visual Wake Words Dataset is derived from the publicly available [COCO](cocodataset.org/#/home) dataset.
  To download the COCO dataset use the script `download_coco.sh`
  ```bash
 bash scripts/download_mscoco.sh path-to-COCO-dataset
 ```
-The Visual Wake Words Dataset evaluates the accuracy on the [minival image ids](https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/data/mscoco_minival_ids.txt).,
+The Visual Wake Words Dataset evaluates the accuracy on the [minival image ids](https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/data/mscoco_minival_ids.txt),
 and for training uses the remaining 115k images of the COCO training/validation dataset.
 
 To create COCO annotation files that convert the 83K/41K split to the 115K/8K split use:
@@ -102,8 +102,8 @@ annotation{
 The `pyvww.pytorch.VisualWakeWordsClassification` can be used in pytorch like any other pytorch image classification
 dataset such as MNIST or ImageNet.
 
-Note: If you used the script for to create the annotations for the 115k/8k split, you need to move or copy the
-train2014 and val2014 directories to a shared directory. E.g.:
+Note: If you used the script `create_coco_train_minival_split.py` to create the annotations for the 115k/8k split, 
+you need to move or copy the train2014 and val2014 directories to a shared directory. E.g.:
 ```bash
 cd path-to-mscoco-dataset/
 mkdir all
