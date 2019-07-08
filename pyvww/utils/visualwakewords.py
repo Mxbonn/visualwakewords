@@ -1,7 +1,7 @@
-from pycocotools.coco import COCO
-import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+import matplotlib.pyplot as plt
 import numpy as np
+from pycocotools.coco import COCO
 
 
 class VisualWakeWords(COCO):

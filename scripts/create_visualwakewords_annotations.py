@@ -54,17 +54,24 @@
         bash download_mscoco.sh path-to-mscoco-dataset
         TRAIN_ANNOTATIONS_FILE="path-to-mscoco-dataset/annotations/instances_train2014.json"
         VAL_ANNOTATIONS_FILE="path-to-mscoco-dataset/annotations/instances_val2014.json"
-        OUTPUT_DIR="new-path-to-visualwakewords-dataset/annotations/"
-        python create_visualwakewords_annotations.py \
+        DIR="path-to-mscoco-dataset/annotations/"
+        python create_coco_train_minival_split.py \
           --train_annotations_file="${TRAIN_ANNOTATIONS_FILE}" \
           --val_annotations_file="${VAL_ANNOTATIONS_FILE}" \
-          --output_dir="${OUTPUT_DIR}" \
+          --output_dir="${DIR}"
+        MAXITRAIN_ANNOTATIONS_FILE="path-to-mscoco-dataset/annotations/instances_maxitrain.json"
+        MINIVAL_ANNOTATIONS_FILE="path-to-mscoco-dataset/annotations/instances_minival.json"
+        VWW_OUTPUT_DIR="new-path-to-visualwakewords-dataset/annotations/"
+        python create_visualwakewords_annotations.py \
+          --train_annotations_file="${MAXITRAIN_ANNOTATIONS_FILE}" \
+          --val_annotations_file="${MINIVAL_ANNOTATIONS_FILE}" \
+          --output_dir="${VWW_OUTPUT_DIR}" \
           --threshold=0.005 \
           --foreground_class='person'
 """
 
-import os
 import json
+import os
 from argparse import ArgumentParser
 
 from pycocotools.coco import COCO
@@ -172,9 +179,9 @@ def main(args):
     train_annotations_file = os.path.realpath(os.path.expanduser(args.train_annotations_file))
     val_annotations_file = os.path.realpath(os.path.expanduser(args.val_annotations_file))
     visualwakewords_annotations_train = os.path.join(
-        output_dir, 'instances_train2014.json')
+        output_dir, 'instances_train.json')
     visualwakewords_annotations_val = os.path.join(
-        output_dir, 'instances_val2014.json')
+        output_dir, 'instances_val.json')
     small_object_area_threshold = args.threshold
     foreground_class_of_interest = args.foreground_class
 

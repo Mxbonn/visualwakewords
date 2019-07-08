@@ -20,6 +20,21 @@ image classification dataset.
  ```bash
 bash scripts/download_mscoco.sh path-to-COCO-dataset
 ```
+The Visual Wake Words Dataset evaluates the accuracy on the [minival image ids](https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/data/mscoco_minival_ids.txt).,
+and for training uses the remaining 115k images of the COCO training/validation dataset.
+
+To create COCO annotation files that convert the 83K/41K split to the 115K/8K split use:
+`scripts/create_coco_train_minival_split.py`
+```bash
+TRAIN_ANNOTATIONS_FILE="path-to-mscoco-dataset/annotations/instances_train2014.json"
+VAL_ANNOTATIONS_FILE="path-to-mscoco-dataset/annotations/instances_val2014.json"
+DIR="path-to-mscoco-dataset/annotations/"
+python scripts/create_coco_train_minival_split.py \
+  --train_annotations_file="${TRAIN_ANNOTATIONS_FILE}" \
+  --val_annotations_file="${VAL_ANNOTATIONS_FILE}" \
+--output_dir="${DIR}"
+```
+
 The process of creating the Visual Wake Words dataset from COCO dataset is as follows.
 Each image is assigned a label 1 or 0. 
 The label 1 is assigned as long as it has at least one bounding box corresponding 
@@ -28,13 +43,13 @@ to the object of interest (e.g. person) with the box area greater than a certain
 
 To generate the new annotations, use the script `scripts/create_visualwakewords_annotations.py`.
 ```bash
-TRAIN_ANNOTATIONS_FILE="path-to-mscoco-dataset/annotations/instances_train2014.json"
-VAL_ANNOTATIONS_FILE="path-to-mscoco-dataset/annotations/instances_val2014.json"
-OUTPUT_DIR="new-path-to-visualwakewords-dataset/annotations/"
-python create_visualwakewords_annotations.py \
-  --train_annotations_file="${TRAIN_ANNOTATIONS_FILE}" \
-  --val_annotations_file="${VAL_ANNOTATIONS_FILE}" \
-  --output_dir="${OUTPUT_DIR}" \
+MAXITRAIN_ANNOTATIONS_FILE="path-to-mscoco-dataset/annotations/instances_maxitrain.json"
+MINIVAL_ANNOTATIONS_FILE="path-to-mscoco-dataset/annotations/instances_minival.json"
+VWW_OUTPUT_DIR="new-path-to-visualwakewords-dataset/annotations/"
+python scripts/create_visualwakewords_annotations.py \
+  --train_annotations_file="${MAXITRAIN_ANNOTATIONS_FILE}" \
+  --val_annotations_file="${MINIVAL_ANNOTATIONS_FILE}" \
+  --output_dir="${VWW_OUTPUT_DIR}" \
   --threshold=0.005 \
   --foreground_class='person'
 ```
@@ -82,14 +97,25 @@ annotation{
 }
 ```
 
+### Pytorch Dataset
+
 The `pyvww.pytorch.VisualWakeWordsClassification` can be used in pytorch like any other pytorch image classification
 dataset such as MNIST or ImageNet.
+
+Note: If you used the script for to create the annotations for the 115k/8k split, you need to move or copy the
+train2014 and val2014 directories to a shared directory. E.g.:
+```bash
+cd path-to-mscoco-dataset/
+mkdir all
+cp -a train2014/. all/
+cp -a val2014/. all/
+```
 ```python
 import torch
 import pyvww
 
-train_dataset = pyvww.pytorch.VisualWakeWordsClassification(root=".../coco/train2014", 
-                    annFile=".../visualwakewords/annotations/instances_train2014.json")
+train_dataset = pyvww.pytorch.VisualWakeWordsClassification(root="path-to-mscoco-dataset/all", 
+                    annFile=".../visualwakewords/annotations/instances_train.json")
 ```
 
 
