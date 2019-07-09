@@ -11,7 +11,7 @@ image classification dataset.
  ### Installation
  The code is implemented in Python 3.7 and can be installed with pip:
  ```bash
- pip install -e .
+ pip install pyvww
  ```
  
  ### Usage
