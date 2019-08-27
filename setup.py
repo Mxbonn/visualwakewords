@@ -23,6 +23,7 @@ setup(
     url='https://github.com/Mxbonn/visualwakewords',
     license='Apache 2.0',
     install_requires=[
-        'pycocotools'
+        'pycocotools',
+        'torchvision'
         ]
 )
