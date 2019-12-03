@@ -25,8 +25,8 @@ def create_maxitrain_minival(train_file, val_file, output_dir):
     Based on the split used by Google
     (https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/data/mscoco_minival_ids.txt).
     Args:
-        train_file: JSON file containing COCO 2014 train annotations
-        val_file: JSON file containing COCO 2014 validation annotations
+        train_file: JSON file containing COCO 2014 or 2017 train annotations
+        val_file: JSON file containing COCO 2014 or 2017 validation annotations
         output_dir: Directory where the new annotation files will be stored.
     """
     maxitrain_path = os.path.join(
@@ -56,21 +56,21 @@ def create_maxitrain_minival(train_file, val_file, output_dir):
     maxitrain_annotations = []
     minival_annotations = []
 
-    maxitrain_images.extend(train_images)
-    for img in val_images:
-        img_id = img['id']
-        if img_id in minival_ids:
-            minival_images.append(img)
-        else:
-            maxitrain_images.append(img)
+    for _images in [train_images, val_images]:
+        for img in _images:
+            img_id = img['id']
+            if img_id in minival_ids:
+                minival_images.append(img)
+            else:
+                maxitrain_images.append(img)
 
-    maxitrain_annotations.extend(train_annotations)
-    for ann in val_annotations:
-        img_id = ann['image_id']
-        if img_id in minival_ids:
-            minival_annotations.append(ann)
-        else:
-            maxitrain_annotations.append(ann)
+    for _annotations in [train_annotations, val_annotations]:
+        for ann in _annotations:
+            img_id = ann['image_id']
+            if img_id in minival_ids:
+                minival_annotations.append(ann)
+            else:
+                maxitrain_annotations.append(ann)
 
     with open(maxitrain_path, 'w') as fp:
         json.dump(
