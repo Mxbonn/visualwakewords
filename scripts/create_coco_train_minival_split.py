@@ -20,7 +20,7 @@ from argparse import ArgumentParser
 
 def create_maxitrain_minival(train_file, val_file, output_dir):
     """ Generate maxitrain and minival annotations files.
-    Loads COCO 2014 train and validation json files and creates a new split with
+    Loads COCO 2014/2017 train and validation json files and creates a new split with
     115k training images and 8k validation images.
     Based on the split used by Google
     (https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/data/mscoco_minival_ids.txt).
@@ -104,12 +104,12 @@ def main(args):
 
 
 if __name__ == '__main__':
-    parser = ArgumentParser(description="Script that takes the 2014 training and validation annotations and"
+    parser = ArgumentParser(description="Script that takes the 2014/2017 training and validation annotations and"
                                         "creates a train split of 115k images and a minival of 8k.")
     parser.add_argument('--train_annotations_file', type=str, required=True,
-                        help='COCO2014 Training annotations JSON file')
+                        help='COCO2014/2017 Training annotations JSON file')
     parser.add_argument('--val_annotations_file', type=str, required=True,
-                        help='COCO2014 Validation annotations JSON file')
+                        help='COCO2014/2017 Validation annotations JSON file')
     parser.add_argument('--output_dir', type=str, default='/tmp/visualwakewords/',
                         help='Output directory where the Visual WakeWords annotations files be stored')
 
