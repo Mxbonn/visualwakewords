@@ -18,12 +18,14 @@ image classification dataset.
  The Visual Wake Words Dataset is derived from the publicly available [COCO](cocodataset.org/#/home) dataset.
  To download the COCO dataset use the script `download_coco.sh`
  ```bash
-bash scripts/download_mscoco.sh path-to-COCO-dataset
+bash scripts/download_mscoco.sh path-to-COCO-dataset year
 ```
+Where `year` is an optional argument that can be either 2014 (default) or 2017.
+
 The Visual Wake Words Dataset evaluates the accuracy on the [minival image ids](https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/data/mscoco_minival_ids.txt),
 and for training uses the remaining 115k images of the COCO training/validation dataset.
 
-To create COCO annotation files that convert the 83K/41K split to the 115K/8K split use:
+To create COCO annotation files that converts the 2014 or 2017 split to the minival split use:
 `scripts/create_coco_train_minival_split.py`
 ```bash
 TRAIN_ANNOTATIONS_FILE="path-to-mscoco-dataset/annotations/instances_train2014.json"
@@ -34,6 +36,7 @@ python scripts/create_coco_train_minival_split.py \
   --val_annotations_file="${VAL_ANNOTATIONS_FILE}" \
 --output_dir="${DIR}"
 ```
+(2014 can be replaced by 2017 if you downloaded the 2017 dataset)
 
 The process of creating the Visual Wake Words dataset from COCO dataset is as follows.
 Each image is assigned a label 1 or 0. 
@@ -102,14 +105,6 @@ annotation{
 The `pyvww.pytorch.VisualWakeWordsClassification` can be used in pytorch like any other pytorch image classification
 dataset such as MNIST or ImageNet.
 
-Note: If you used the script `create_coco_train_minival_split.py` to create the annotations for the 115k/8k split, 
-you need to move or copy the train2014 and val2014 directories to a shared directory. E.g.:
-```bash
-cd path-to-mscoco-dataset/
-mkdir all
-cp -a train2014/. all/
-cp -a val2014/. all/
-```
 ```python
 import torch
 import pyvww

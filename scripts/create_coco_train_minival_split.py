@@ -4,7 +4,7 @@
     (https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/data/mscoco_minival_ids.txt).
 
     Usage:
-    From this folder, run the following commands:
+    From this folder, run the following commands: (2014 can be replaced by 2017 if you downloaded the 2017 dataset)
         TRAIN_ANNOTATIONS_FILE="path-to-mscoco-dataset/annotations/instances_train2014.json"
         VAL_ANNOTATIONS_FILE="path-to-mscoco-dataset/annotations/instances_val2014.json"
         OUTPUT_DIR="path-to-mscoco-dataset/annotations/"
@@ -110,8 +110,8 @@ if __name__ == '__main__':
                         help='COCO2014/2017 Training annotations JSON file')
     parser.add_argument('--val_annotations_file', type=str, required=True,
                         help='COCO2014/2017 Validation annotations JSON file')
-    parser.add_argument('--output_dir', type=str, default='/tmp/visualwakewords/',
-                        help='Output directory where the Visual WakeWords annotations files be stored')
+    parser.add_argument('--output_dir', type=str, required=True,
+                        help='Output directory where the maxitrain and minival annotations files will be stored')
 
     args = parser.parse_args()
     main(args)

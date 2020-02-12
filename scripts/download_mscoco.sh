@@ -1,4 +1,4 @@
-# Copyright 2019 Maxim Bonnaerens. All Rights Reserved.
+# Copyright 2020 Maxim Bonnaerens. All Rights Reserved.
 #
 # Copyright 2019 The TensorFlow Authors. All Rights Reserved.
 #
@@ -24,8 +24,9 @@
 #
 set -e
 
+YEAR=${2:-2014}
 if [ -z "$1" ]; then
-  echo "usage download_mscoco.sh [data dir]"
+  echo "usage download_mscoco.sh [data dir] (2014|2017)"
   exit
 fi
 
@@ -38,38 +39,42 @@ fi
 # Create the output directories.
 OUTPUT_DIR="${1%/}"
 mkdir -p "${OUTPUT_DIR}"
-CURRENT_DIR=$(pwd)
 
 # Helper function to download and unpack a .zip file.
 function download_and_unzip() {
   local BASE_URL=${1}
   local FILENAME=${2}
 
-  if [ ! -f ${FILENAME} ]; then
+  if [ ! -f "${FILENAME}" ]; then
     echo "Downloading ${FILENAME} to $(pwd)"
     wget -nd -c "${BASE_URL}/${FILENAME}"
   else
     echo "Skipping download of ${FILENAME}"
   fi
   echo "Unzipping ${FILENAME}"
-  ${UNZIP} ${FILENAME}
+  ${UNZIP} "${FILENAME}"
+  rm "${FILENAME}"
 }
 
-cd ${OUTPUT_DIR}
+cd "${OUTPUT_DIR}"
 
 # Download the images.
 BASE_IMAGE_URL="http://images.cocodataset.org/zips"
 
-TRAIN_IMAGE_FILE="train2014.zip"
-download_and_unzip ${BASE_IMAGE_URL} ${TRAIN_IMAGE_FILE}
-TRAIN_IMAGE_DIR="${OUTPUT_DIR}/train2014"
+TRAIN_IMAGE_FILE="train${YEAR}.zip"
+download_and_unzip ${BASE_IMAGE_URL} "${TRAIN_IMAGE_FILE}"
+TRAIN_IMAGE_DIR="${OUTPUT_DIR}/train${YEAR}"
 
-VAL_IMAGE_FILE="val2014.zip"
-download_and_unzip ${BASE_IMAGE_URL} ${VAL_IMAGE_FILE}
-VAL_IMAGE_DIR="${OUTPUT_DIR}/val2014"
+VAL_IMAGE_FILE="val${YEAR}.zip"
+download_and_unzip ${BASE_IMAGE_URL} "${VAL_IMAGE_FILE}"
+VAL_IMAGE_DIR="${OUTPUT_DIR}/val${YEAR}"
 
+COMMON_DIR="all$YEAR"
+mkdir -p "${COMMON_DIR}"
+for i in ${TRAIN_IMAGE_DIR}/*; do cp --symbolic-link "$i" ${COMMON_DIR}/; done
+for i in ${VAL_IMAGE_DIR}/*; do cp --symbolic-link "$i" ${COMMON_DIR}/; done
 
 # Download the annotations.
 BASE_INSTANCES_URL="http://images.cocodataset.org/annotations"
-INSTANCES_FILE="annotations_trainval2014.zip"
-download_and_unzip ${BASE_INSTANCES_URL} ${INSTANCES_FILE}
+INSTANCES_FILE="annotations_trainval${YEAR}.zip"
+download_and_unzip ${BASE_INSTANCES_URL} "${INSTANCES_FILE}"
