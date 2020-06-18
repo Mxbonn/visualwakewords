@@ -151,19 +151,6 @@ def create_visual_wakeword_annotations(annotations_file,
                                                                                           foreground_class_name,
                                                                                           len(coco.imgs)))
     negative_img_ids = list(set(coco.imgs.keys()) - positive_img_ids)
-    for img_id in negative_img_ids:
-        new_ann = {
-            "id": new_ann_id,
-            "image_id": img_id,
-            "category_id": 0,
-            "area": 0.0,
-            "bbox": [0,0,0,0],
-            "iscrowd": 0,
-            "segmentation": [],
-        }
-        annotations.append(new_ann)
-        new_ann_id += 1
-
     # Output Visual WakeWords annotations and labels
     with open(visualwakewords_annotations_path, 'w') as fp:
         json.dump(
