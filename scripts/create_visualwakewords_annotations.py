@@ -142,6 +142,7 @@ def create_visual_wakeword_annotations(annotations_file,
                         "area": ann["area"],
                         "bbox": ann["bbox"],
                         "iscrowd": ann["iscrowd"],
+                        "segmentation": ann["segmentation"],
                     }
                     annotations.append(new_ann)
                     positive_img_ids.add(img_id)
@@ -156,8 +157,9 @@ def create_visual_wakeword_annotations(annotations_file,
             "image_id": img_id,
             "category_id": 0,
             "area": 0.0,
-            "bbox": [],
+            "bbox": [0,0,0,0],
             "iscrowd": 0,
+            "segmentation": [],
         }
         annotations.append(new_ann)
         new_ann_id += 1
