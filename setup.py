@@ -14,7 +14,7 @@ readme = read('README.md')
 setup(
     name='pyvww',
     packages=find_packages(),
-    version='0.1.0',
+    version='0.1.1',
     description='Python API to work with the Visual Wake Words Dataset.',
     long_description=readme,
     long_description_content_type="text/markdown",
