@@ -30,7 +30,10 @@ class VisualWakeWordsClassification(VisionDataset):
         vww = self.vww
         img_id = self.ids[index]
         ann_ids = vww.getAnnIds(imgIds=img_id)
-        target = vww.loadAnns(ann_ids)[0]['category_id']
+        if ann_ids:
+            target = vww.loadAnns(ann_ids)[0]['category_id']
+        else:
+            target = 0
 
         path = vww.loadImgs(img_id)[0]['file_name']
 
